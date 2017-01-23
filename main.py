@@ -5,7 +5,7 @@ import sys
 from Ping import Ping
 
 
-def ping(hostname,
+def ping(hostname="192.168.0.1",
          count=3,
          timeout=3000,
          packet_size=64,
