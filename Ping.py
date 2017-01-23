@@ -90,6 +90,8 @@ class Ping(object):
         self.sequence_number = 0
         self.unknown_host = False
 
+        self.connected_devices = []
+
         self.silent = silent
 
         if own_id is None:
@@ -113,8 +115,7 @@ class Ping(object):
                 info = socket.getaddrinfo(self.stats.destination_host, None)[0]
                 self.stats.destination_ip = info[4][0]
             else:
-                self.stats.destination_ip = \
-                    socket.gethostbyname(self.stats.destination_host)
+                self.stats.destination_ip = socket.gethostbyname(self.stats.destination_host)
         except socket.error:
             error_type, error_value, etb = sys.exc_info()
             self._stderr.write("\nERROR: Unknown host: %s (%s)\n" % (self.stats.destination_host, error_value.args[1]))
@@ -303,18 +304,20 @@ class Ping(object):
 
     def export_data(self):
         self.calculate_packet_loss()
-        jitter = self.calculate_jitter()
+        jitter = 0.00
         bandwidth = 0.00
 
         if self.stats.packets_received > 0:
             self.calculate_packet_average()
             bandwidth = self.calculate_bandwidth()
+            jitter = self.calculate_jitter()
 
         # Export results to CSV
         timestamp = datetime.datetime.now()
         timestamp.isoformat()
         csv_data_storage = open('data.csv','a')
         csv_data_storage.write(("\n" +
+                                str(self.stats.destination_ip) + "," +
                                 str(timestamp) + "," +
                                 str(self.stats.lost_rate) + "," +
                                 str(self.stats.min_time) + "," +
@@ -324,7 +327,7 @@ class Ping(object):
                                 str(jitter)))
         csv_data_storage.close()
 
-        sys.stdout.write("Exported data to CSV.\n")
+        # sys.stdout.write("Exported data to CSV.\n")
 
     def convert_header_dictionary(self, names, struct_format, data):
         """

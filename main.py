@@ -3,9 +3,10 @@
 
 import sys
 from Ping import Ping
+from ARPScan import ARPScan
 
 
-def ping(hostname="192.168.0.1",
+def ping(hostname,
          count=3,
          timeout=3000,
          packet_size=64,
@@ -103,27 +104,25 @@ def main(arguments):
 
         (args, positional_args) = parser.parse_args()
 
-        # Add destination to this object to match argparse.parse_args() output
+        # Use non-default IP address passed in at command line
         if positional_args:
             args.destination = positional_args[0]
-        else:
-            args.destination = False
 
     if not args.destination:
-        parser.print_help()
-        sys.exit(1)
+        args.destination = "192.168.0.1"
 
     # Convert timeout from sec to ms
     args.timeout *= 1000
 
-    retval = ping(hostname=args.destination,
-                  count=args.count,
-                  timeout=args.timeout,
-                  packet_size=args.packetsize,
-                  own_id=None,
-                  quiet=args.quiet,
-                  ipv6=args.ipv6)
+    # connected_devices = []
+    scan = ARPScan()
+    connected_devices = scan.scan()
 
-    sys.exit(retval)
+    for device_ip in connected_devices:
+        return_value = ping(hostname=device_ip, count=args.count, timeout=args.timeout,
+                            packet_size=args.packetsize,
+                            own_id=None, quiet=args.quiet, ipv6=args.ipv6)
+
+        # sys.exit(return_value)
 
 main(sys.argv)
