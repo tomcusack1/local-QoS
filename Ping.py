@@ -324,7 +324,7 @@ class Ping(object):
                                 str(jitter)))
         csv_data_storage.close()
 
-        sys.stdout.write("\nExported data to CSV.\n")
+        sys.stdout.write("Exported data to CSV.\n")
 
     def convert_header_dictionary(self, names, struct_format, data):
         """
