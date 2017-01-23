@@ -66,8 +66,7 @@ def calculate_checksum(header: str) -> int:
 
 
 class Ping(object):
-    def __init__(self, destination, timeout=3000, packet_size=64, own_id=None,
-                 quiet=False, silent=False, ipv6=False):
+    def __init__(self, destination, timeout=3000, packet_size=64, own_id=None, quiet=False, silent=False, ipv6=False):
         self.stats = PingStats
         # Statistics
         self.stats.destination_ip = "0.0.0.0"
@@ -123,12 +122,15 @@ class Ping(object):
             return
 
     def calculate_ping_delay(self):
-        """
-        Returns either the delay (in ms) or None on timeout.
-        # if self.ipv6:
-        #    sock_af = socket.AF_INET6
-        #    sock_type = socket.SOCK_RAW
-        #    sock_protocol = socket.getprotobyname("ipv6-icmp")
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+
+        Returns:
+            The return value. True for success, False otherwise.
+
         """
         delay = None
         sock_af = socket.AF_INET
@@ -189,10 +191,16 @@ class Ping(object):
         return delay
 
     def send_ping(self, current_socket: socket.socket) -> float:
-        """
-            Sends a ping, and returns the time it was sent.
-        """
+        """Example function with PEP 484 type annotations.
 
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+
+        Returns:
+            The return value. True for success, False otherwise.
+
+        """
         checksum = 0
 
         # Make a dummy header with a 0 checksum.
@@ -225,20 +233,28 @@ class Ping(object):
 
         return send_time
 
-    def receive_ping(self, current_socket):
-        """
-            Receive the ping from the socket. Timeout = in ms
+    def receive_ping(self, current_socket: socket.socket) -> float:
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+
+        Returns:
+            The return value. True for success, False otherwise.
+
         """
 
         time_left = self.timeout / 1000.0
 
-        # Loop while waiting for packet or timeout
         while True:
-            select_start = default_timer()
-            what_ready = select.select([current_socket], [], [], time_left)
-            select_duration = (default_timer() - select_start)
+
+            start_time = default_timer()
+            open_connection = select.select([current_socket], [], [], time_left)
+            wait_time = default_timer() - start_time
             time_received = default_timer()
-            packet_data, addr = current_socket.recvfrom(ICMP_MAX_RECV)
+
+            packet_data, address = current_socket.recvfrom(ICMP_MAX_RECV)
             icmp_header_raw = packet_data[20:28]
             icmp_header = self.convert_header_dictionary(names=["type", "code", "checksum", "packet_id", "seq_number"],
                                                          struct_format="!BBHHH", data=icmp_header_raw)
@@ -246,28 +262,44 @@ class Ping(object):
                                                               "protocol", "checksum", "src_ip", "dest_ip"],
                                                        struct_format="!BBHHHBBHII", data = packet_data[:20])
 
-            if what_ready[0] is None:
-                # Check if timeout occurred
+            if open_connection[0] is None:
                 return None, 0, ip_header, icmp_header
 
             if icmp_header["packet_id"] == self.own_id:
-                # Our packet
                 data_size = len(packet_data) - 28
                 return time_received, (data_size + 8), ip_header, icmp_header
 
-            time_left = time_left - select_duration
+            time_left -= wait_time
+
             if time_left <= 0:
                 return None, 0, ip_header, icmp_header
 
-    def calculate_packet_loss(self):
+    def calculate_packet_loss(self) -> float:
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
+        """
         if self.stats.packets_sent:
             lost_count = self.stats.packets_sent - self.stats.packets_received
-            self.stats.lost_rate = \
-                float(lost_count) / self.stats.packets_sent * 100.0
+            self.stats.lost_rate = float(lost_count) / self.stats.packets_sent * 100.0
         else:
             self.stats.lost_rate = 100.0
 
-    def calculate_packet_average(self):
+    def calculate_packet_average(self) -> float:
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
+        """
         if self.stats.packets_received:
             self.stats.average_time = self.stats.total_time / self.stats.packets_received
         else:
@@ -284,6 +316,15 @@ class Ping(object):
 
     def calculate_jitter(self) -> float:
         """
+        Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
+
             Gets the difference in time from 2 packets and calculates the jitter
             i.e. 1485176622.90079 - 1485176621.897069 = 1.00372099876 - 1
             Returns a float representation of the jitter (IPDV)
@@ -303,6 +344,15 @@ class Ping(object):
         return sum(jitter) / float(len(jitter))
 
     def export_data(self):
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
+        """
         self.calculate_packet_loss()
         jitter = 0.00
         bandwidth = 0.00
@@ -329,15 +379,28 @@ class Ping(object):
 
         # sys.stdout.write("Exported data to CSV.\n")
 
-    def convert_header_dictionary(self, names, struct_format, data):
-        """
-        Unpack the raw received IP and ICMP header info into to a dictionary
+    def convert_header_dictionary(self, names, struct_format, data) -> dict:
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
         """
         unpacked_data = struct.unpack(struct_format, data)
         return dict(list(zip(names, unpacked_data)))
 
     def signal_handler(self, signum, frame):
-        """
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
         Handle print_exit via signals
         """
         self.calculate_packet_loss()
@@ -345,6 +408,15 @@ class Ping(object):
         sys.exit(not self.stats.packets_received)
 
     def setup_signal_handler(self):
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
+        """
         # Handle Ctrl-C
         signal.signal(signal.SIGINT, self.signal_handler)
 
@@ -353,8 +425,14 @@ class Ping(object):
             signal.signal(signal.SIGBREAK, self.signal_handler)
 
     def run(self, count=None, deadline=None):
-        """
-            Send and receive pings in a loop. Stop if count or until deadline.
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            param1: The first parameter.
+            param2: The second parameter.
+        Returns:
+            The return value. True for success, False otherwise.
+
         """
         self.setup_signal_handler()
 
