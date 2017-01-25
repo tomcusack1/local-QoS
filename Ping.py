@@ -339,7 +339,7 @@ class Ping(object):
                 jitter.append(window - 1)
                 i += 2
             except IndexError:
-                break
+                sum(jitter) / float(len(jitter))
 
         return sum(jitter) / float(len(jitter))
 
@@ -365,7 +365,7 @@ class Ping(object):
         # Export results to CSV
         timestamp = datetime.datetime.now()
         timestamp.isoformat()
-        csv_data_storage = open('data.csv','a')
+        csv_data_storage = open(str(datetime.date.today()) + '.csv', 'a')
         csv_data_storage.write(("\n" +
                                 str(self.stats.destination_ip) + "," +
                                 str(timestamp) + "," +
@@ -434,7 +434,7 @@ class Ping(object):
             The return value. True for success, False otherwise.
 
         """
-        self.setup_signal_handler()
+        #self.setup_signal_handler()
 
         while True:
             if self.unknown_host:
