@@ -11,7 +11,7 @@ from icmp_messages import ICMP_CONTROL_MESSAGE, ICMPv6_CONTROL_MESSAGE
 from PingStats import PingStats
 
 # ICMP parameters
-ICMP_ECHOREPLY = 0          # Echo reply (per RFC792)
+ICMP_ECHOREPLY = 0          # Echo reply   (per RFC792)
 ICMP_ECHO = 8               # Echo request (per RFC792)
 ICMP_ECHO_IPV6 = 128        # Echo request (per RFC4443)
 ICMP_ECHO_IPV6_REPLY = 129  # Echo request (per RFC4443)
@@ -223,6 +223,7 @@ class Ping(object):
         # Build packet and record time it was sent
         packet = header + data
         send_time = default_timer()
+        print(send_time)
 
         try:
             current_socket.sendto(packet, (self.stats.destination_ip, self.stats.destination_port))
@@ -233,15 +234,15 @@ class Ping(object):
 
         return send_time
 
-    def receive_ping(self, current_socket: socket.socket) -> float:
-        """Example function with PEP 484 type annotations.
+    def receive_ping(self, current_socket: socket.socket):
+        """A ping listener. Opens the current socket, and waits for a sent ping to come back.
 
         Args:
-            param1: The first parameter.
-            param2: The second parameter.
+            current_socket: The connection being used to send pings to
 
         Returns:
-            The return value. True for success, False otherwise.
+            The time in ms the amount of time the ping took to be received
+            None: The connection timed out, or the host was not valid
 
         """
 
@@ -365,7 +366,7 @@ class Ping(object):
         # Export results to CSV
         timestamp = datetime.datetime.now()
         timestamp.isoformat()
-        csv_data_storage = open(str(datetime.date.today()) + '.csv', 'a')
+        csv_data_storage = open('data/' + str(datetime.date.today()) + '.csv', 'a')
         csv_data_storage.write(("\n" +
                                 str(self.stats.destination_ip) + "," +
                                 str(timestamp) + "," +

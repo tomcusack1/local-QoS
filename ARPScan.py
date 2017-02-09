@@ -7,7 +7,6 @@ from scapy.all import *
 
 
 class ARPScan(object):
-
     def __init__(self):
         self.ip_range = "192.168.0.1/24"
         self.connect_devices = []
