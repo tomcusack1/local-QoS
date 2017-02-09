@@ -12,6 +12,8 @@ class QualityScore(object):
         self.max_RTT = []
         self.bandwidth = []
         self.pdv = []
+        self.raw_quality_score = []
+        self.quality_score = tuple()
 
     def read_data(self):
         """Iterates over daily CSV file reading measurements into memory."""
@@ -28,6 +30,7 @@ class QualityScore(object):
                 self.pdv.append(row[' Packet Delay Variation'])
 
     def generate_score(self):
+
         def get_start_hour(time: list) -> tuple:
             """Returns a list of the ith position where a new block starts, plus the numeric hour"""
             start_positions = []
@@ -42,13 +45,12 @@ class QualityScore(object):
             # Hourly data is here to be aggregated and a quality score produced
             #     Fields are [0] Average RTT; [1] Bandwidth; [2] Packet Loss; [3] Jitter
             #     data[0]: 00:00 --> 00:59.  data[1]: 01:00 --> 01:59
+            qs = []
             for hourly_data in data:
-                # print("\nMinute of data.")
-                for measurements in hourly_data:
-                    # Loop over the measurements.
-                    # These are:
-                    #   Ave RTT --> Bandwidth --> Packet Loss --> PDV
-                    print(measurements)
+                quality_score = (float(hourly_data[0]) / 2) + (float(hourly_data[1]) * 1000) + \
+                                (float(hourly_data[2])) + (float(hourly_data[3]) * 100)
+                qs.append(quality_score)
+            self.raw_quality_score.append(sum(qs) / len(qs))
 
         def analyse_data(i_data):
             # Gets the ith range between the hourly ranges, and zips the hourly data together
@@ -65,17 +67,32 @@ class QualityScore(object):
 
                 # Got data compressed as a list object in hourly_data[]
                 # Time to fire this to our calculate method to get hourly quality aggregated data
-                print("\n\nNEW HOUR BLOCK")
+                # print("\n\nNEW HOUR BLOCK")
                 aggregate_hourly_data(hourly_data)
+
+        def prepare_data():
+            hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00',
+                     '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
+                     '22:00', '23:00']
+            self.quality_score = (list(zip(hours, self.raw_quality_score)))
 
         # Start analysis
         analyse_data(get_start_hour(self.timestamp))
+        prepare_data()
+        self.quality_score
+
+    def export_data(self):
+        with open('qs_data.csv', "w", newline='') as csv_file:
+            writer = csv.writer(csv_file, delimiter=',')
+            for line in self.quality_score:
+                writer.writerow(line)
 
 
 def main():
     generate_quality_score = QualityScore('2017-01-26.csv')
     generate_quality_score.read_data()
     generate_quality_score.generate_score()
+    generate_quality_score.export_data()
 
 if __name__ == '__main__':
     main()
