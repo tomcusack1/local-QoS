@@ -1,4 +1,6 @@
 import csv
+import datetime
+import sys
 
 
 class QualityScore(object):
@@ -20,14 +22,14 @@ class QualityScore(object):
         with open(self.csv_data_file) as file:
             reader = csv.DictReader(file)
             for row in reader:
-                self.ip_address.append(row['P Address'])
+                self.ip_address.append(row['IP Address'])
                 self.timestamp.append(row['Timestamp'])
                 self.packet_loss.append(row['Packet Loss'])
                 self.min_RTT.append(row['Min RTT'])
                 self.ave_RTT.append(row['Ave RTT'])
                 self.max_RTT.append(row['Max RTT'])
                 self.bandwidth.append(row['Bandwidth'])
-                self.pdv.append(row[' Packet Delay Variation'])
+                self.pdv.append(row['Packet Delay Variation'])
 
     def generate_score(self):
 
@@ -74,25 +76,31 @@ class QualityScore(object):
             hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00',
                      '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
                      '22:00', '23:00']
-            self.quality_score = (list(zip(hours, self.raw_quality_score)))
+            date = list()
+            for _ in range(25):
+                date.append(str(datetime.date.today()))
+            self.quality_score = (list(zip(date + hours, self.raw_quality_score)))
 
         # Start analysis
         analyse_data(get_start_hour(self.timestamp))
         prepare_data()
-        self.quality_score
 
     def export_data(self):
-        with open('qs_data.csv', "w", newline='') as csv_file:
+        with open('quality_data.csv', "a", newline='') as csv_file:
             writer = csv.writer(csv_file, delimiter=',')
             for line in self.quality_score:
                 writer.writerow(line)
 
 
 def main():
-    generate_quality_score = QualityScore('2017-01-26.csv')
-    generate_quality_score.read_data()
-    generate_quality_score.generate_score()
-    generate_quality_score.export_data()
+    try:
+        generate_quality_score = QualityScore(str(datetime.date.today()) + '.csv')
+        generate_quality_score.read_data()
+        generate_quality_score.generate_score()
+        generate_quality_score.export_data()
+
+    except FileNotFoundError as error:
+        raise error.with_traceback(sys.exc_info()[2])
 
 if __name__ == '__main__':
     main()

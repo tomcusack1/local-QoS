@@ -2,6 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc102cc2-3aa5-4a69-bb77-3e148073a6ea" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-01-25.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-01-26.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-01-27.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-01-28.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-01-29.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-01.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-02.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-03.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-04.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-06.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-07.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-08.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-09.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/2017-02-09.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/data.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/qs_data.csv" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ping.iml" afterPath="$PROJECT_DIR$/.idea/ping.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/QualityScore.py" afterPath="$PROJECT_DIR$/data/QualityScore.py" />
     </list>
@@ -26,10 +44,12 @@
       <file leaf-file-name="QualityScore.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data/QualityScore.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state relative-caret-position="283">
+              <caret line="91" column="34" selection-start-line="91" selection-start-column="34" selection-end-line="91" selection-end-column="34" />
               <folding>
-                <element signature="e#1128#3459#0" expanded="false" />
+                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#120#442#0" expanded="false" />
+                <element signature="e#477#1114#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -38,8 +58,8 @@
       <file leaf-file-name="Ping.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="369" column="38" selection-start-line="369" selection-start-column="38" selection-end-line="369" selection-end-column="38" />
+            <state relative-caret-position="198">
+              <caret line="368" column="77" selection-start-line="368" selection-start-column="42" selection-end-line="368" selection-end-column="77" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <element signature="e#649#1959#0" expanded="false" />
@@ -444,9 +464,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15277778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15277778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -907,8 +927,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ping.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="369" column="38" selection-start-line="369" selection-start-column="38" selection-end-line="369" selection-end-column="38" />
+        <state relative-caret-position="198">
+          <caret line="368" column="77" selection-start-line="368" selection-start-column="42" selection-end-line="368" selection-end-column="77" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <element signature="e#649#1959#0" expanded="false" />
@@ -929,10 +949,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data/QualityScore.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        <state relative-caret-position="283">
+          <caret line="91" column="34" selection-start-line="91" selection-start-column="34" selection-end-line="91" selection-end-column="34" />
           <folding>
-            <element signature="e#1128#3459#0" expanded="false" />
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#120#442#0" expanded="false" />
+            <element signature="e#477#1114#0" expanded="false" />
           </folding>
         </state>
       </provider>
