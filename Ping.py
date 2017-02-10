@@ -8,6 +8,7 @@ import signal
 import csv
 import datetime
 from icmp_messages import ICMP_CONTROL_MESSAGE, ICMPv6_CONTROL_MESSAGE
+from pathlib import Path
 from PingStats import PingStats
 
 # ICMP parameters
@@ -223,7 +224,7 @@ class Ping(object):
         # Build packet and record time it was sent
         packet = header + data
         send_time = default_timer()
-        print(send_time)
+        # print(send_time)
 
         try:
             current_socket.sendto(packet, (self.stats.destination_ip, self.stats.destination_port))
@@ -345,40 +346,49 @@ class Ping(object):
         return sum(jitter) / float(len(jitter))
 
     def export_data(self):
-        """Example function with PEP 484 type annotations.
-
-        Args:
-            param1: The first parameter.
-            param2: The second parameter.
-        Returns:
-            The return value. True for success, False otherwise.
-
-        """
+        """Exports the measurements accumulated above, and appends them to a CSV for later analysis"""
         self.calculate_packet_loss()
         jitter = 0.00
         bandwidth = 0.00
 
         if self.stats.packets_received > 0:
+            # Check if we had 100% packet loss / timeout. Return 0.00 if this happened.
             self.calculate_packet_average()
             bandwidth = self.calculate_bandwidth()
             jitter = self.calculate_jitter()
 
-        # Export results to CSV
+        # TODO: Use Python 3 syntax to export to CSV
         timestamp = datetime.datetime.now()
         timestamp.isoformat()
-        csv_data_storage = open('data/' + str(datetime.date.today()) + '.csv', 'a')
-        csv_data_storage.write(("\n" +
-                                str(self.stats.destination_ip) + "," +
-                                str(timestamp) + "," +
-                                str(self.stats.lost_rate) + "," +
-                                str(self.stats.min_time) + "," +
-                                str(self.stats.average_time) + "," +
-                                str(self.stats.max_time) + "," +
-                                str(bandwidth) + "," +
-                                str(jitter)))
-        csv_data_storage.close()
+        daily_csv_data_dump = Path('data/' + str(datetime.date.today()) + '.csv')
 
-        # sys.stdout.write("Exported data to CSV.\n")
+        if daily_csv_data_dump.is_file():
+            csv_data_storage = open('data/' + str(datetime.date.today()) + '.csv', 'a')
+            csv_data_storage.write(("\n" +
+                                    str(self.stats.destination_ip) + "," +
+                                    str(timestamp) + "," +
+                                    str(self.stats.lost_rate) + "," +
+                                    str(self.stats.min_time) + "," +
+                                    str(self.stats.average_time) + "," +
+                                    str(self.stats.max_time) + "," +
+                                    str(bandwidth) + "," +
+                                    str(jitter)))
+            csv_data_storage.close()
+        else:
+            # If the file doesn't exist yet, we need the header file to be inserted
+            csv_data_storage = open('data/' + str(datetime.date.today()) + '.csv', 'a')
+            csv_data_storage.write(
+                "IP Address,Timestamp,Packet Loss,Min RTT,Ave RTT,Max RTT,Bandwidth,Packet Delay Variation")
+            csv_data_storage.write(("\n" +
+                                    str(self.stats.destination_ip) + "," +
+                                    str(timestamp) + "," +
+                                    str(self.stats.lost_rate) + "," +
+                                    str(self.stats.min_time) + "," +
+                                    str(self.stats.average_time) + "," +
+                                    str(self.stats.max_time) + "," +
+                                    str(bandwidth) + "," +
+                                    str(jitter)))
+            csv_data_storage.close()
 
     def convert_header_dictionary(self, names, struct_format, data) -> dict:
         """Example function with PEP 484 type annotations.
